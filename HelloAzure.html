@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A tiny, single-file landing page that's perfect for Azure static hosting." />
+  <title>My Azure Static Page</title>
+  <style>
+    :root{
+      --bg: #0b1220;       /* deep navy */
+      --card:#0f172a;      /* slate-900 */
+      --ink:#e5e7eb;       /* gray-200 */
+      --muted:#94a3b8;     /* slate-400 */
+      --accent:#2563eb;    /* azure-ish blue */
+      --accent-2:#60a5fa;  /* lighter blue */
+      --ring: rgba(96,165,250,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1000px 600px at 10% -10%, rgba(96,165,250,.15), transparent),
+                  radial-gradient(800px 500px at 110% 20%, rgba(37,99,235,.12), transparent),
+                  var(--bg);
+      color:var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+      letter-spacing:.2px;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:32px}
+
+    /* Header */
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit}
+    .logo{width:36px;height:36px;border-radius:10px; display:grid; place-items:center; background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 10px 30px rgba(37,99,235,.35)}
+    .brand span{font-weight:700; letter-spacing:.3px}
+    nav a{color:var(--muted); margin-left:18px; text-decoration:none}
+    nav a:hover{color:var(--ink)}
+
+    /* Hero */
+    .hero{display:grid; grid-template-columns: 1.1fr .9fr; gap:28px; align-items:center; padding:36px 0}
+    @media (max-width: 860px){ .hero{grid-template-columns:1fr} }
+    .hero h1{font-size: clamp(1.8rem, 2.6vw + 1rem, 3rem); line-height:1.15; margin:0 0 12px}
+    .hero p{color:var(--muted); margin:0 0 22px}
+    .cta{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{appearance:none; border:0; padding:12px 16px; border-radius:12px; cursor:pointer; font-weight:600}
+    .btn.primary{background: linear-gradient(135deg, var(--accent), var(--accent-2)); color:white; box-shadow:0 12px 30px rgba(37,99,235,.35)}
+    .btn.ghost{background: rgba(255,255,255,.02); color:var(--ink); outline:1px solid rgba(148,163,184,.15)}
+    .btn:focus{outline:2px solid var(--ring); outline-offset:2px}
+
+    /* Card */
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(148,163,184,.15); border-radius:16px; padding:18px; box-shadow: 0 12px 40px rgba(2,6,23,.45)}
+    .grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px}
+    @media (max-width: 900px){ .grid{grid-template-columns:1fr 1fr} }
+    @media (max-width: 640px){ .grid{grid-template-columns:1fr} }
+    .card h3{margin:.2rem 0 .4rem; font-size:1.1rem}
+    .card p{margin:0; color:var(--muted)}
+
+    /* Footer */
+    footer{margin:40px 0 10px; color:var(--muted); font-size:.9rem; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .ok{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:rgba(16,185,129,.12); color:#34d399; border:1px solid rgba(16,185,129,.25)}
+
+    /* Tiny utility */
+    .hide{display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="#" aria-label="Homepage">
+        <div class="logo" aria-hidden="true">
+          <!-- Azure-ish spark icon -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo">
+            <path d="M4 14L12 2l8 12-8 8-8-8z" fill="white" opacity=".9"/>
+          </svg>
+        </div>
+        <span>Azure Static Site</span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#status">Status</a>
+        <a href="#about">About</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>Deploy a beautiful, single‑file page to Azure</h1>
+        <p>This is a minimal, self‑contained <span class="mono">index.html</span>. No build tools, no dependencies—just upload and go.</p>
+        <div class="cta">
+          <button class="btn primary" onclick="document.getElementById('deploy').scrollIntoView({behavior:'smooth'})">How to Deploy</button>
+          <a class="btn ghost" href="#features">Explore Features</a>
+        </div>
+      </div>
+      <div class="card" aria-label="Preview panel">
+        <canvas id="spark" width="600" height="360" style="width:100%; height:auto; border-radius:12px; background: radial-gradient(40% 30% at 70% 20%, rgba(96,165,250,.25), transparent), linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02))"></canvas>
+      </div>
+    </section>
+
+    <section id="features" class="grid" aria-label="Highlights">
+      <article class="card">
+        <h3>One file</h3>
+        <p>All HTML, CSS, and JS live here. Perfect for Azure Storage static sites or Static Web Apps.</p>
+      </article>
+      <article class="card">
+        <h3>Fast & accessible</h3>
+        <p>Responsive layout, keyboard focus, semantic markup, and no render‑blocking assets.</p>
+      </article>
+      <article class="card">
+        <h3>Easy to customize</h3>
+        <p>Tweak colors and copy. Add sections as needed without changing your hosting setup.</p>
+      </article>
+    </section>
+
+    <section id="deploy" class="card" style="margin-top:22px">
+      <h3 style="margin-top:0">Quick Deploy (CLI)</h3>
+      <p>Use Azure Storage Static Website or Azure Static Web Apps. For Storage, the gist is:</p>
+      <ol>
+        <li>Create a storage account</li>
+        <li>Enable <em>Static website</em> with <span class="mono">index.html</span> as the index</li>
+        <li>Upload this file to the <span class="mono">$web</span> container</li>
+      </ol>
+      <details>
+        <summary class="mono">Show sample Azure CLI commands</summary>
+        <pre class="mono" aria-label="CLI commands" tabindex="0"># 1) Create a resource group & storage account (adjust names/region)
+az group create -n my-rg -l eastus
+az storage account create -n mystaticdemo123 -g my-rg -l eastus --sku Standard_LRS
+
+# 2) Enable static website hosting
+az storage blob service-properties update \
+  --account-name mystaticdemo123 \
+  --static-website \
+  --index-document index.html
+
+# 3) Upload the page to the $web container
+az storage blob upload \
+  --account-name mystaticdemo123 \
+  -c "$web" -f ./index.html -n index.html --overwrite
+
+# 4) Get the public URL
+az storage account show -n mystaticdemo123 -g my-rg \
+  --query "primaryEndpoints.web" -o tsv
+</pre>
+      </details>
+    </section>
+
+    <section id="status" class="card" style="margin-top:22px">
+      <h3 style="margin-top:0">Runtime Status</h3>
+      <p>Use this to verify your deployment is serving fresh content.</p>
+      <ul>
+        <li>Loaded at: <span id="loadedAt" class="mono">—</span></li>
+        <li>Client timezone: <span id="tz" class="mono">—</span></li>
+        <li>Health: <span class="ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>OK</span></li>
+      </ul>
+    </section>
+
+    <section id="about" class="grid" style="margin-top:22px">
+      <article class="card">
+        <h3>Why this template?</h3>
+        <p>It’s tiny, attractive, and production‑ready for demos, maintenance pages, or micro‑sites.</p>
+      </article>
+      <article class="card">
+        <h3>Next steps</h3>
+        <p>Add pages (about, contact) or wire forms to services like Logic Apps, Functions, or Formspree.</p>
+      </article>
+      <article class="card">
+        <h3>Need a backend?</h3>
+        <p>Pair this with Azure Functions or an existing API. You can keep the same static hosting.</p>
+      </article>
+    </section>
+
+    <footer>
+      <div>
+        <span>&copy; <span id="year"></span> My Azure Static Page</span>
+      </div>
+      <div class="mono">v1.0 · single-file</div>
+    </footer>
+  </div>
+
+  <script>
+    // Simple runtime info
+    const $ = (id)=>document.getElementById(id);
+    const now = new Date();
+    $('loadedAt').textContent = now.toLocaleString();
+    $('tz').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    $('year').textContent = now.getFullYear();
+
+    // Pretty canvas sparkle for the hero preview (no deps)
+    const c = document.getElementById('spark');
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    const dots = Array.from({length: 90}, () => ({
+      x: Math.random()*W, y: Math.random()*H, r: Math.random()*2+0.6, s: Math.random()*0.6+0.2
+    }));
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(const d of dots){
+        ctx.beginPath();
+        ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+        ctx.fillStyle = `rgba(96,165,250,${0.25 + Math.sin((Date.now()/700)*d.s + d.x)*0.2})`;
+        ctx.shadowBlur = 12; ctx.shadowColor = 'rgba(96,165,250,.6)';
+        ctx.fill();
+        d.x += (Math.sin(d.y/80)+0.2)*0.2; d.y += (Math.cos(d.x/60)+0.2)*0.15;
+        if(d.x>W) d.x=0; if(d.y>H) d.y=0;
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
