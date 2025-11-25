@@ -2,7 +2,7 @@ name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]        # or master (match your default branch)
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches: [ main ]
@@ -15,37 +15,37 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: false
-          lfs: false
 
-      # Optional: quick repo layout to confirm paths
+      # Optional: confirm your paths
       - name: Show repo layout (debug)
         run: |
           echo "PWD=$(pwd)"
           find . -maxdepth 2 -print
 
+      # Fail fast if token is missing (helps avoid confusing errors)
+      - name: Verify token present
+        run: |
+          if [ -z "${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}" ]; then
+            echo "❌ AZURE_STATIC_WEB_APPS_API_TOKEN is missing in repository secrets"; exit 1;
+          fi
+
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_KIND_GRASS_013C5C41E }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: upload
-          app_location: "."   # <-- folder that contains index.html
+          app_location: "."   # folder containing index.html
           api_location: ""                   # no API
-          output_location: ""                # no build output folder
-          skip_app_build: true               # skip Oryx build
+          output_location: ""                # no build output
+          skip_app_build: true               # don't invoke Oryx
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
-    name: Close Pull Request Job
     steps:
-      - name: Close Pull Request
-        uses: Azure/static-web-apps-deploy@v1
+      - uses: Azure/static-web-apps-deploy@v1
         with:
           action: close
-
